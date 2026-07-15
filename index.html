@@ -43,6 +43,28 @@
     .hero h1 { font-size: 2em; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
     .hero p  { font-size: 0.95em; opacity: 0.85; }
 
+    /* ========== NAV TABS ========== */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px 0 0;
+    }
+    .nav-tabs a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.88em;
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.25);
+      transition: all 0.2s;
+    }
+    .nav-tabs a:hover, .nav-tabs a.active {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border-color: rgba(255,255,255,0.5);
+    }
+
     /* ========== KPI ROW ========== */
     .kpi-row {
       display: grid;
@@ -148,6 +170,50 @@
       text-overflow: ellipsis;
     }
 
+    /* ========== INSIGHT CARDS ========== */
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .insight-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border-top: 3px solid var(--primary);
+    }
+    .insight-card:nth-child(2) { border-top-color: var(--green); }
+    .insight-card:nth-child(3) { border-top-color: var(--orange); }
+    .insight-card:nth-child(4) { border-top-color: var(--red); }
+    .insight-card:nth-child(5) { border-top-color: var(--purple); }
+    .insight-card:nth-child(6) { border-top-color: var(--primary); }
+    .insight-card h3 {
+      font-size: 1em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .insight-card h3 .icon { font-size: 1.3em; }
+    .insight-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .insight-card li {
+      font-size: 0.88em;
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--border);
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+    .insight-card li:last-child { border-bottom: none; }
+    .insight-card li::before {
+      content: "→ ";
+      color: var(--primary);
+      font-weight: 600;
+    }
+
     /* ========== FOOTER ========== */
     .footer {
       text-align: center;
@@ -163,10 +229,12 @@
     /* ========== RESPONSIVE ========== */
     @media (max-width: 1100px) {
       .charts-grid { grid-template-columns: repeat(2, 1fr); }
+      .insight-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 700px) {
       .kpi-row { grid-template-columns: repeat(2, 1fr); }
       .charts-grid { grid-template-columns: 1fr; }
+      .insight-grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 1.5em; }
     }
   </style>
@@ -178,6 +246,11 @@
     <div class="container">
       <h1>电商用户价值分层分析</h1>
       <p>基于 RFM 模型对 54,191 条交易数据中的 4,454 名客户进行价值分层</p>
+      <div class="nav-tabs">
+        <a href="#overview" class="active">总览</a>
+        <a href="#charts">图表</a>
+        <a href="#insights">洞察与建议</a>
+      </div>
     </div>
   </div>
 
@@ -191,7 +264,7 @@
     </div>
 
     <!-- Table -->
-    <div class="section">
+    <div class="section" id="overview">
       <h2>客群分层结果</h2>
       <div class="table-wrap">
         <table>
@@ -208,7 +281,7 @@
     </div>
 
     <!-- Charts -->
-    <div class="section">
+    <div class="section" id="charts">
       <h2>可视化图表</h2>
       <div class="charts-grid">
         <div class="chart-card">
@@ -242,6 +315,93 @@
         <div class="chart-card">
           <img class="thumb" src="figures/08_dashboard.png" alt="综合看板">
           <div class="caption">图8：综合看板</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Business Insights -->
+    <div class="section" id="insights">
+      <h2>业务洞察与精准营销建议</h2>
+
+      <!-- Key Findings -->
+      <h3 style="font-size:1em; color:var(--text-light); margin-bottom:12px; margin-top:8px;">关键发现</h3>
+      <div class="insight-grid" style="margin-bottom:24px;">
+        <div class="insight-card">
+          <h3><span class="icon">💎</span> 高价值用户是核心资产</h3>
+          <ul>
+            <li>仅占 15.9% 的客户贡献了 32.4% 的营收</li>
+            <li>人均贡献 ¥24,714，是挽留客户的 123 倍</li>
+            <li>应作为最高优先级运营对象</li>
+          </ul>
+        </div>
+        <div class="insight-card">
+          <h3><span class="icon">⚠️</span> 一般客群需进一步细分</h3>
+          <ul>
+            <li>占比 26.7% 但特征混杂，包含多种 RFM 组合</li>
+            <li>其中部分客户 R≤2 且 M≥4，实为"保持"客户被误归类</li>
+            <li>建议优化分层规则，释放被掩盖的高价值信号</li>
+          </ul>
+        </div>
+        <div class="insight-card">
+          <h3><span class="icon">📉</span> 挽留客群价值极低</h3>
+          <ul>
+            <li>占比 20.8% 但仅贡献 2.6% 营收</li>
+            <li>人均贡献仅 ¥1,534，低于整体均值 86%</li>
+            <li>建议控制营销投入，采用低成本自动化触达</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Marketing Strategies -->
+      <h3 style="font-size:1em; color:var(--text-light); margin-bottom:12px;">高价值用户精准营销策略</h3>
+      <div class="insight-grid">
+        <div class="insight-card">
+          <h3><span class="icon">🏆</span> 会员等级与身份认同</h3>
+          <ul>
+            <li>设立"VIP/黑金"会员等级，赋予专属身份标识</li>
+            <li>生日月赠送定制礼品或双倍积分</li>
+            <li>提供专属客服通道和会员编号徽章</li>
+          </ul>
+        </div>
+        <div class="insight-card">
+          <h3><span class="icon">🎯</span> 个性化推荐与交叉销售</h3>
+          <ul>
+            <li>基于购买历史推荐高单价新品或关联品类</li>
+            <li>每周推送基于偏好的精选商品清单</li>
+            <li>对"保持"客群推出"回归礼包"定向召回</li>
+          </ul>
+        </div>
+        <div class="insight-card">
+          <h3><span class="icon">⭐</span> 阶梯式忠诚度计划</h3>
+          <ul>
+            <li>消费额越高积分倍率越高（1.5x/2x/3x）</li>
+            <li>积分可兑换限定款商品或体验服务</li>
+            <li>设置年度消费里程碑奖励（5万/10万档）</li>
+          </ul>
+        </div>
+        <div class="insight-card">
+          <h3><span class="icon">🚀</span> 专属服务体验</h3>
+          <ul>
+            <li>免运费特权 + 优先发货</li>
+            <li>退换货绿色通道，减少售后摩擦</li>
+            <li>新品提前 48 小时预览购买权</li>
+          </ul>
+        </div>
+        <div class="insight-card">
+          <h3><span class="icon">🤝</span> 社交裂变与口碑传播</h3>
+          <ul>
+            <li>邀请好友注册双方各得积分奖励</li>
+            <li>建立 VIP 用户社群，促互动与归属感</li>
+            <li>鼓励晒单评价，给予额外积分或折扣券</li>
+          </ul>
+        </div>
+        <div class="insight-card">
+          <h3><span class="icon">📊</span> 数据驱动的精细化运营</h3>
+          <ul>
+            <li>R 分数从 4→3 时自动触发关怀触达</li>
+            <li>监控"一般"客群中潜在"保持"客户</li>
+            <li>每季度复盘品类偏好，动态调整策略</li>
+          </ul>
         </div>
       </div>
     </div>
