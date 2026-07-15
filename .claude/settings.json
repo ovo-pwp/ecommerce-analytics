@@ -1,0 +1,5 @@
+{
+  "env": {
+    "ANTHROPIC_MAX_TOKENS": "16000"
+  }
+}

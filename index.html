@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电商用户价值分层分析 — RFM 模型</title>
+  <style>
+    :root {
+      --primary: #2E86AB;
+      --dark: #A23B72;
+      --orange: #F18F01;
+      --red: #C73E1D;
+      --green: #6A994E;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --border: #e0e0e0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+      color: white;
+      padding: 60px 0 40px;
+      text-align: center;
+    }
+    .hero h1 { font-size: 2.2em; margin-bottom: 12px; }
+    .hero p { font-size: 1.1em; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      padding: 30px 0;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .stat-card .value { font-size: 1.8em; font-weight: 700; }
+    .stat-card .label { font-size: 0.85em; color: var(--text-light); margin-top: 4px; }
+    .stat-card:nth-child(1) .value { color: var(--primary); }
+    .stat-card:nth-child(2) .value { color: var(--green); }
+    .stat-card:nth-child(3) .value { color: var(--orange); }
+    .stat-card:nth-child(4) .value { color: var(--red); }
+
+    /* Section */
+    .section {
+      padding: 30px 0;
+    }
+    .section h2 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+    }
+
+    /* Table */
+    .table-wrapper {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      background: var(--primary);
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f7ff; }
+
+    /* Charts grid */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      padding: 20px 0 40px;
+    }
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+    }
+    .chart-card:hover { transform: translateY(-4px); }
+    .chart-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .chart-card .caption {
+      padding: 12px 16px;
+      font-size: 0.9em;
+      color: var(--text-light);
+      text-align: center;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--text-light);
+      font-size: 0.85em;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+    .footer a { color: var(--primary); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="container">
+      <h1>电商用户价值分层分析</h1>
+      <p>基于 RFM 模型对 54,191 条交易数据中的 4,454 名客户进行价值分层，输出多维度可视化分析报表。</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Key Metrics -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="value">4,454</div>
+        <div class="label">活跃客户</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">5,394 万</div>
+        <div class="label">总营收</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">1,125</div>
+        <div class="label">客单价</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">35.3 天</div>
+        <div class="label">平均距上次消费</div>
+      </div>
+    </div>
+
+    <!-- Segment Table -->
+    <div class="section">
+      <h2>客群分层结果</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>客群</th>
+              <th>客户数</th>
+              <th>占比</th>
+              <th>营收贡献</th>
+              <th>营收占比</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>🟦 高价值</strong></td>
+              <td>707</td>
+              <td>15.9%</td>
+              <td>¥1,747 万</td>
+              <td><strong>32.4%</strong></td>
+            </tr>
+            <tr>
+              <td><strong>🟪 一般</strong></td>
+              <td>1,189</td>
+              <td>26.7%</td>
+              <td>¥1,519 万</td>
+              <td>28.2%</td>
+            </tr>
+            <tr>
+              <td><strong>🟧 保持</strong></td>
+              <td>481</td>
+              <td>10.8%</td>
+              <td>¥1,032 万</td>
+              <td>19.1%</td>
+            </tr>
+            <tr>
+              <td><strong>🟩 发展</strong></td>
+              <td>1,149</td>
+              <td>25.8%</td>
+              <td>¥954 万</td>
+              <td>17.7%</td>
+            </tr>
+            <tr>
+              <td><strong>🟥 挽留</strong></td>
+              <td>928</td>
+              <td>20.8%</td>
+              <td>¥142 万</td>
+              <td>2.6%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Visualizations -->
+    <div class="section">
+      <h2>可视化图表</h2>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <img src="figures/01_segment_distribution.png" alt="客户分层分布">
+          <div class="caption">图1：客户价值分层分布</div>
+        </div>
+        <div class="chart-card">
+          <img src="figures/02_revenue_contribution.png" alt="营收贡献">
+          <div class="caption">图2：各客群营收贡献占比</div>
+        </div>
+        <div class="chart-card">
+          <img src="figures/03_monthly_trend.png" alt="月度趋势">
+          <div class="caption">图3：月度营收与订单量趋势</div>
+        </div>
+        <div class="chart-card">
+          <img src="figures/04_rfm_scatter.png" alt="RFM 散点图">
+          <div class="caption">图4：RFM 散点图（R vs M）</div>
+        </div>
+        <div class="chart-card">
+          <img src="figures/05_radar_charts.png" alt="雷达图">
+          <div class="caption">图5：各客群特征对比（归一化雷达图）</div>
+        </div>
+        <div class="chart-card">
+          <img src="figures/06_monetary_analysis.png" alt="消费金额分析">
+          <div class="caption">图6：消费金额分布直方图 + 箱线图</div>
+        </div>
+        <div class="chart-card">
+          <img src="figures/07_country_ranking.png" alt="国家排名">
+          <div class="caption">图7：Top 10 国家/地区消费额排名</div>
+        </div>
+        <div class="chart-card">
+          <img src="figures/08_dashboard.png" alt="综合看板">
+          <div class="caption">图8：电商客户价值分析综合看板</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="container">
+      <p>基于 RFM 模型的电商用户价值分层分析 · 数据源：UCL Online Retail (2010-2011)</p>
+      <p style="margin-top: 8px;">
+        <a href="https://github.com/ovo-pwp/ecommerce-analytics" target="_blank">GitHub 仓库</a>
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>

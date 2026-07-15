@@ -36,9 +36,9 @@ data/*.db
 !data/.gitkeep
 
 # Figures
-figures/*.png
-figures/*.jpg
-figures/*.svg
+!figures/*.png
+!figures/*.jpg
+!figures/*.svg
 !figures/.gitkeep
 
 # IDE
@@ -50,3 +50,8 @@ figures/*.svg
 # OS
 .DS_Store
 Thumbs.db
+
+# Tests
+pytest_cache/
+.coverage
+htmlcov/
